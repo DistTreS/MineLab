@@ -1,35 +1,43 @@
-package com.minelab.ui
+package com.minelab
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.minelab.ui.theme.MinelabTheme
-import com.minelab.ui.screens.LandingScreen
+import androidx.navigation.compose.rememberNavController
+import com.minelab.ui.navigation.NavGraph
+import com.minelab.ui.viewmodel.LoginViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import com.minelab.data.local.AppDatabase
+import com.minelab.data.entity.User
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+
+        val loginViewModel = LoginViewModel(applicationContext) // Buat instance secara manual
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val userDao = AppDatabase.getInstance(applicationContext).userDao()
+            userDao.insertUser(
+                User(
+                    id_user = "1",
+                    nim = "12345678",
+                    name = "Admin",
+                    email = "admin@example.com",
+                    password = "admin123",
+                    role = "admin"
+                )
+            )
+        }
+
         setContent {
-            MinelabTheme {
-                LandingScreen()
-            }
+            val navController = rememberNavController()
+            NavGraph(
+                navController = navController,
+                loginViewModel = loginViewModel
+            )
         }
     }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
 }

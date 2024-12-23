@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace = "com.minelab"
-    compileSdk = 35
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.minelab"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -65,6 +65,9 @@ dependencies {
     implementation(libs.androidx.espresso.core)
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.logging.interceptor)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
